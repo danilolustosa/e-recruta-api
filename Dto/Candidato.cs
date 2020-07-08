@@ -12,12 +12,12 @@ namespace erecruta.Dto
         public string Email { get; set; }
         public string Celular { get; set; }
         public string LinkedIn { get; set; }
-        public string Curriculo { get; set; }
+        public byte[]? Curriculo { get; set; }
         public int Classificacao { get; set; }
         public long EstadoId { get; set; }
         public long CidadeId { get; set; }
         public string Observacao { get; set; }
         public bool Situacao { get; set; }
-        public Oportunidade Oportunidade { get; set; }
+        public int OportunidadeId { get; set; }
     }
 }

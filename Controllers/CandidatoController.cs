@@ -8,13 +8,13 @@ using System;
 namespace erecruta.Controllers
 {
     [Route("[controller]")]
-    public class OportunidadeController : ControllerBase
+    public class CandidatoController : ControllerBase
     {
-        private IOportunidadeService _service;
-        public OportunidadeController(IOportunidadeService service) =>  _service = service;
+        private ICandidatoService _service;
+        public CandidatoController(ICandidatoService candidatoService) => _service = candidatoService;
 
         [HttpPost("salvar")]
-        public IActionResult Salvar([FromBody] Oportunidade request)
+        public IActionResult Salvar([FromBody] Candidato request)
         {
             try
             {
@@ -28,11 +28,11 @@ namespace erecruta.Controllers
         }
 
         [HttpGet("listar")]
-        public IActionResult Listar()
+        public IActionResult Listar([FromQuery] int oportunidadeId)
         {
             try
             {
-                var resultado = _service.Listar();
+                var resultado = _service.Listar(oportunidadeId);
                 return new ObjectResult(resultado) { StatusCode = resultado.StatusCode };
             }
             catch (Exception ex)
@@ -54,6 +54,5 @@ namespace erecruta.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new BaseResponse { StatusCode = StatusCodes.Status500InternalServerError, Mensagem = ex.Message });
             }
         }
-
     }
 }
