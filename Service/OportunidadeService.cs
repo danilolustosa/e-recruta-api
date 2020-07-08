@@ -15,14 +15,16 @@ namespace erecruta.Service
         private IOportunidadeRepository _oportunidadeRepository;
         private IOportunidadeNivelRepository _oportunidadeNivelRepository;
         private INivelRepository _nivelRepository;
+        private IIBGEService _iBGEService;
 
         public OportunidadeService(IOportunidadeRepository oportunidadeRepository,
             IOportunidadeNivelRepository oportunidadeNivelRepository,
-            INivelRepository nivelRepository) 
+            INivelRepository nivelRepository, IIBGEService iBGEService) 
         {
             _oportunidadeNivelRepository = oportunidadeNivelRepository;
             _oportunidadeRepository = oportunidadeRepository;
             _nivelRepository = nivelRepository;
+            _iBGEService = iBGEService;
         } 
 
         public ListResponse Salvar(Oportunidade oportunidade) 
@@ -110,6 +112,8 @@ namespace erecruta.Service
 
             lista.Oportunidades.ForEach(o => { 
                 o.Niveis = _nivelRepository.ListarByOportunidade(o.Id);
+                o.Estado = _iBGEService.ObterEstado(o.EstadoId);
+                o.Cidade = _iBGEService.ObterCidade(o.CidadeId);
             });
 
             lista.StatusCode = StatusCodes.Status200OK;
@@ -123,6 +127,8 @@ namespace erecruta.Service
             if (oportunidade != null)
             {
                 oportunidade.Niveis = _nivelRepository.ListarByOportunidade(oportunidade.Id);
+                oportunidade.Estado = _iBGEService.ObterEstado(oportunidade.EstadoId);
+                oportunidade.Cidade = _iBGEService.ObterCidade(oportunidade.CidadeId);
                 return new OportunidadeResponse() { Oportunidade = oportunidade, StatusCode = StatusCodes.Status200OK };
             }                
             else

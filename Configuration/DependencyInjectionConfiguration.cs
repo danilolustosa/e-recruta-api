@@ -19,6 +19,8 @@ namespace erecruta.Configuration
             services.AddSingleton<INivelRepository, NivelRepository>();
             services.AddSingleton<ICandidatoService, CandidatoService>();
             services.AddSingleton<ICandidatoRepository, CandidatoRepository>();
+            services.AddSingleton<IIBGEService, IBGEService>();
+            services.AddSingleton<IIBGERepository, IBGERepository>();
             return services;
         }
     }

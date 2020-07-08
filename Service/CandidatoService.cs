@@ -12,10 +12,12 @@ namespace erecruta.Service
     public class CandidatoService : ICandidatoService
     {
         private ICandidatoRepository _candidatoRepository;
+        private IIBGEService _iBGEService;
 
-        public CandidatoService(ICandidatoRepository candidatoRepository)
+        public CandidatoService(ICandidatoRepository candidatoRepository, IIBGEService iBGEService)
         {
             _candidatoRepository = candidatoRepository;
+            _iBGEService = iBGEService;
         }
 
         public ListResponse Salvar(Candidato candidato)
@@ -62,6 +64,11 @@ namespace erecruta.Service
             if (lista.Candidatos.Count == 0)
                 return new ListaCandidatoResponse() { StatusCode = StatusCodes.Status404NotFound };
 
+            lista.Candidatos.ForEach(c => {
+                c.Estado = _iBGEService.ObterEstado(c.EstadoId);
+                c.Cidade = _iBGEService.ObterCidade(c.CidadeId);
+            });
+
             lista.StatusCode = StatusCodes.Status200OK;
             return lista;
         }
@@ -71,7 +78,11 @@ namespace erecruta.Service
             var candidato = _candidatoRepository.Obter(id);
 
             if (candidato != null)
+            {
+                candidato.Estado = _iBGEService.ObterEstado(candidato.EstadoId);
+                candidato.Cidade = _iBGEService.ObterCidade(candidato.CidadeId);                
                 return new CandidatoResponse() { Candidato = candidato, StatusCode = StatusCodes.Status200OK };
+            }                
             else
                 return new CandidatoResponse() { StatusCode = StatusCodes.Status404NotFound };
         }

@@ -20,5 +20,7 @@ namespace erecruta.Dto
         public string JobDescription { get; set; }
         public bool Situacao { get; set; }
         public List<Nivel> Niveis { get; set; }
+        public Estado Estado { get; set; }
+        public Cidade Cidade { get; set; }
     }
 }
