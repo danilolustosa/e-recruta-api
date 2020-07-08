@@ -8,7 +8,9 @@ namespace erecruta.Interface
 {
     public interface IOportunidadeRepository
     {
-        void Incluir(Oportunidade oportunidade);
+        int Incluir(Oportunidade oportunidade);
+        void Alterar(Oportunidade oportunidade);
         List<Oportunidade> Listar();
+        Oportunidade Obter(int Id);
     }
 }

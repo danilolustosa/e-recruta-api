@@ -13,27 +13,25 @@ namespace erecruta.Repository
     {
         public OportunidadeRepository(IConfiguration configuration) : base(configuration) { }
 
-        public void Incluir(Oportunidade oportunidade)
+        public int Incluir(Oportunidade oportunidade)
         {
             const string insert = @"
                         INSERT INTO [dbo].[Oportunidade]
-                                   ([Id]
-                                   ,[Titulo]
+                                   ([Titulo]
                                    ,[Empresa]
                                    ,[EstadoId]
-                                   ,[MunicipioId]
+                                   ,[CidadeId]
                                    ,[Regiao]
                                    ,[Remuneracao]
                                    ,[Regime]
                                    ,[Posicao]
                                    ,[JobDescription]
                                    ,[Situacao])
-                             VALUES
-                                   (@Id
-                                   ,@Titulo
+                             output INSERTED.Id VALUES
+                                   (@Titulo
                                    ,@Empresa
                                    ,@EstadoId
-                                   ,@MunicipioId
+                                   ,@CidadeId
                                    ,@Regiao
                                    ,@Remuneracao
                                    ,@Regime
@@ -45,10 +43,31 @@ namespace erecruta.Repository
             using (var con = new SqlConnection(ObterConexao))
             {
                 con.Open();
-                con.ExecuteScalar<long>(insert, new
-                {
-                    oportunidade
-                });
+                return con.ExecuteScalar<int>(insert, oportunidade);
+            }
+        }
+
+        public void Alterar(Oportunidade oportunidade)
+        {
+            const string insert = @"
+                    UPDATE [dbo].[Oportunidade]
+                       SET [Titulo] = @Titulo
+                          ,[Empresa] = @Empresa
+                          ,[EstadoId] = @EstadoId
+                          ,[CidadeId] = @CidadeId
+                          ,[Regiao] = @Regiao
+                          ,[Remuneracao] = @Remuneracao
+                          ,[Regime] = @Regime
+                          ,[Posicao] = @Posicao
+                          ,[JobDescription] = @JobDescription
+                          ,[Situacao] = @Situacao
+                     WHERE [Id] = @Id
+            ";
+
+            using (var con = new SqlConnection(ObterConexao))
+            {
+                con.Open();
+                con.Execute(insert, oportunidade);
             }
         }
 
@@ -59,7 +78,7 @@ namespace erecruta.Repository
                           ,[Titulo]
                           ,[Empresa]
                           ,[EstadoId]
-                          ,[MunicipioId]
+                          ,[CidadeId]
                           ,[Regiao]
                           ,[Remuneracao]
                           ,[Regime]
@@ -74,6 +93,31 @@ namespace erecruta.Repository
             {
                 con.Open();
                 return con.Query<Oportunidade>(query).ToList();
+            }
+        }
+
+        public Oportunidade Obter(int Id)
+        {
+            const string query = @"
+                    SELECT [Id]
+                          ,[Titulo]
+                          ,[Empresa]
+                          ,[EstadoId]
+                          ,[CidadeId]
+                          ,[Regiao]
+                          ,[Remuneracao]
+                          ,[Regime]
+                          ,[Posicao]
+                          ,[JobDescription]
+                          ,[Situacao]
+                      FROM [dbo].[Oportunidade]
+                      WHERE Id = @Id
+            ";
+
+            using (var con = new SqlConnection(ObterConexao))
+            {
+                con.Open();
+                return con.Query<Oportunidade>(query, new { Id }).FirstOrDefault();
             }
         }
     }

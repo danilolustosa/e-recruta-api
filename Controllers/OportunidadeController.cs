@@ -1,33 +1,62 @@
 ﻿using erecruta.Dto;
 using erecruta.Interface;
+using erecruta.Model;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
+using System;
 
 namespace erecruta.Controllers
 {
     [Route("[controller]")]
-    public class OportunidadeController : BaseController
+    public class OportunidadeController : ControllerBase
     {
         private IOportunidadeService _service;
-        public OportunidadeController(ILogger<OportunidadeController> logger, IOportunidadeService service) : base(logger) 
+        public OportunidadeController(IOportunidadeService service)
         {
             _service = service;
         }
 
-        [HttpPost("incluir")]
-        public async Task<IActionResult> Incluir([FromBody] Oportunidade request) => await TratarResultadoAsync(async () =>
+        [HttpPost("salvar")]
+        public IActionResult Salvar([FromBody] Oportunidade request)
         {
-            _service.Incluir(request);
-            return new ObjectResult(new object()) { StatusCode = 200 };
-        });
+            try
+            {
+                var resultado = _service.Salvar(request);
+                return new ObjectResult(resultado) { StatusCode = resultado.StatusCode };
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new BaseResponse { StatusCode = StatusCodes.Status500InternalServerError, Mensagem = ex.Message });
+            }
+        }
 
-        [HttpPost("listar")]
-        public async Task<IActionResult> Listar() => await TratarResultadoAsync(async () =>
+        [HttpGet("listar")]
+        public IActionResult Listar()
         {
-            var resultado = _service.Listar();
-            return new ObjectResult(resultado) { StatusCode = 200 };
-        });
+            try
+            {
+                var resultado = _service.Listar();
+                return new ObjectResult(resultado) { StatusCode = resultado.StatusCode };
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new BaseResponse { StatusCode = StatusCodes.Status500InternalServerError, Mensagem = ex.Message });
+            }
+        }
+
+        [HttpGet("obter")]
+        public IActionResult Obter([FromQuery] int id)
+        {
+            try
+            {
+                var resultado = _service.Obter(id);
+                return new ObjectResult(resultado) { StatusCode = resultado.StatusCode };
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new BaseResponse { StatusCode = StatusCodes.Status500InternalServerError, Mensagem = ex.Message });
+            }
+        }
 
     }
 }
