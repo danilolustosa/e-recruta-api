@@ -43,6 +43,13 @@ namespace erecruta
 
             app.UseRouting();
 
+            app.UseCors(c =>
+            {
+                c.AllowAnyHeader();
+                c.AllowAnyMethod();
+                c.AllowAnyOrigin();
+            });
+
             app.UtilizarConfiguracaoSwagger();
 
             app.UseAuthorization();
