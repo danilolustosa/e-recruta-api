@@ -19,6 +19,7 @@ namespace erecruta.Repository
                         INSERT INTO [dbo].[Oportunidade]
                                    ([Titulo]
                                    ,[Empresa]
+                                   ,[DataHoraCriacao]
                                    ,[EstadoId]
                                    ,[CidadeId]
                                    ,[Regiao]
@@ -30,7 +31,8 @@ namespace erecruta.Repository
                              output INSERTED.Id VALUES
                                    (@Titulo
                                    ,@Empresa
-                                   ,@EstadoId
+                                   ,@DataHoraCriacao
+                                   ,@EstadoId                                   
                                    ,@CidadeId
                                    ,@Regiao
                                    ,@Remuneracao
@@ -53,6 +55,7 @@ namespace erecruta.Repository
                     UPDATE [dbo].[Oportunidade]
                        SET [Titulo] = @Titulo
                           ,[Empresa] = @Empresa
+                          ,[DataHoraCriacao] = @DataHoraCriacao
                           ,[EstadoId] = @EstadoId
                           ,[CidadeId] = @CidadeId
                           ,[Regiao] = @Regiao
@@ -77,6 +80,7 @@ namespace erecruta.Repository
                     SELECT [Id]
                           ,[Titulo]
                           ,[Empresa]
+                          ,[DataHoraCriacao]
                           ,[EstadoId]
                           ,[CidadeId]
                           ,[Regiao]
@@ -101,6 +105,7 @@ namespace erecruta.Repository
             const string query = @"
                     SELECT [Id]
                           ,[Titulo]
+                          ,[DataHoraCriacao]
                           ,[Empresa]
                           ,[EstadoId]
                           ,[CidadeId]

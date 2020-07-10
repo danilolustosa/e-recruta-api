@@ -11,6 +11,8 @@ namespace erecruta.Dto
         public int Id { get; set; }
         public string Titulo { get; set; }
         public string Empresa { get; set; }
+        public DateTime DataHoraCriacao { get; set; }
+        public string Duracao { get; set; }
         public long EstadoId { get; set; }
         public long CidadeId { get; set; }
         public string Regiao { get; set; }

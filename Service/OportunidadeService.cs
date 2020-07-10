@@ -1,4 +1,5 @@
-﻿using erecruta.Dto;
+﻿using erecruta.Common;
+using erecruta.Dto;
 using erecruta.Interface;
 using erecruta.Model;
 using Microsoft.AspNetCore.Http;
@@ -82,6 +83,10 @@ namespace erecruta.Service
                     Erros = listResponse
                 };
 
+            if (oportunidade.DataHoraCriacao == null)
+                oportunidade.DataHoraCriacao = DateTime.Now;
+
+
             if (oportunidade.Id == 0)
                 oportunidade.Id = _oportunidadeRepository.Incluir(oportunidade);
             else
@@ -114,6 +119,8 @@ namespace erecruta.Service
                 o.Niveis = _nivelRepository.ListarByOportunidade(o.Id);
                 o.Estado = _iBGEService.ObterEstado(o.EstadoId);
                 o.Cidade = _iBGEService.ObterCidade(o.CidadeId);
+                o.Duracao = (DateTime.Now - o.DataHoraCriacao).RelativeTime();
+
             });
 
             lista.StatusCode = StatusCodes.Status200OK;
@@ -129,6 +136,8 @@ namespace erecruta.Service
                 oportunidade.Niveis = _nivelRepository.ListarByOportunidade(oportunidade.Id);
                 oportunidade.Estado = _iBGEService.ObterEstado(oportunidade.EstadoId);
                 oportunidade.Cidade = _iBGEService.ObterCidade(oportunidade.CidadeId);
+                TimeSpan timeSpan = (DateTime.Now - oportunidade.DataHoraCriacao);
+                oportunidade.Duracao = timeSpan.RelativeTime();
                 return new OportunidadeResponse() { Oportunidade = oportunidade, StatusCode = StatusCodes.Status200OK };
             }                
             else
