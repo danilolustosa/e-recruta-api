@@ -21,10 +21,6 @@ namespace erecruta.Configuration
                     Description = "E-recruta V1"
                 });
 
-                var security = new Dictionary<string, IEnumerable<string>>
-                {
-                    {"Bearer", new string[] { }},
-                };
             });
 
             return services;
